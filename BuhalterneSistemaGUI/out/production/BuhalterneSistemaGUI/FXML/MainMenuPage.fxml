@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXcontrollers.MainMenuPageController">
+    <children>
+        <AnchorPane prefHeight="400.0" prefWidth="614.0">
+            <children>
+                <Button fx:id="categories" layoutX="205.0" layoutY="128.0" mnemonicParsing="false" onAction="#manageCategories" prefHeight="39.0" prefWidth="171.0" text="Manage Categories" />
+                <Button fx:id="incomes" layoutX="205.0" layoutY="180.0" mnemonicParsing="false" onAction="#manageIncomes" prefHeight="39.0" prefWidth="171.0" text="Manage Incomes" />
+                <Button fx:id="expenses" layoutX="205.0" layoutY="233.0" mnemonicParsing="false" onAction="#manageExpenses" prefHeight="39.0" prefWidth="171.0" text="Manage Expenses" />
+                <Button fx:id="save" layoutX="205.0" layoutY="288.0" mnemonicParsing="false" onAction="#saveChanges" prefHeight="39.0" prefWidth="171.0" text="Save Changes " />
+                <Button fx:id="individualUsers" layoutX="205.0" layoutY="74.0" mnemonicParsing="false" onAction="#manageIndividualUsers" prefHeight="39.0" prefWidth="171.0" text="Manage Individual Users" />
+                <Button fx:id="companyUsers" layoutX="205.0" layoutY="21.0" mnemonicParsing="false" onAction="#manageCompanyUsers" prefHeight="39.0" prefWidth="171.0" text="Manage Company Users" />
+            <Button fx:id="exit" layoutX="205.0" layoutY="340.0" mnemonicParsing="false" onAction="#exitProgram" prefHeight="39.0" prefWidth="171.0" text="Exit" />
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>

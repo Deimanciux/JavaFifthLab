@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXcontrollers.income.AddIncomePageController">
+    <children>
+        <AnchorPane prefHeight="400.0" prefWidth="600.0">
+            <children>
+                <Label layoutX="26.0" layoutY="21.0" text="Add Income">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Label>
+                <Label layoutX="28.0" layoutY="50.0" text="Amount" />
+                <TextField fx:id="amount" layoutX="28.0" layoutY="67.0" />
+                <Label layoutX="28.0" layoutY="121.0" text="Income Giver " />
+                <TextField fx:id="incomeGiver" layoutX="28.0" layoutY="138.0" />
+                <Label layoutX="293.0" layoutY="41.0" text="Description" />
+                <Button fx:id="addIncome" layoutX="226.0" layoutY="317.0" mnemonicParsing="false" onAction="#addIncome" text="Add Income" />
+                <TextArea fx:id="description" layoutX="293.0" layoutY="63.0" prefHeight="79.0" prefWidth="247.0" />
+            <Button fx:id="cancel" layoutX="318.0" layoutY="317.0" mnemonicParsing="false" onAction="#returnToIncomeMainPage" text="Cancel" />
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>

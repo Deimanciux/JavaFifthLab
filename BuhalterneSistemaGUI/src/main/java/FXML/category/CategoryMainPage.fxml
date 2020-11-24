@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXcontrollers.category.CategoryMainPageController">
+    <children>
+        <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="609.0">
+            <menus>
+                <Menu mnemonicParsing="false" text="Category Managing">
+                    <items>
+                        <MenuItem fx:id="create" mnemonicParsing="false" onAction="#createCategory" text="Create" />
+                        <MenuItem fx:id="update" mnemonicParsing="false" onAction="#updateCategory" text="Update" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Responsible people">
+                    <items>
+                        <MenuItem fx:id="addUsers" mnemonicParsing="false" onAction="#addResponsiblePeople" text="Add" />
+                  <MenuItem fx:id="deleteUsers" mnemonicParsing="false" onAction="#deleteResponsiblePeople" text="Delete" />
+                    </items>
+                </Menu>
+            <Menu mnemonicParsing="false" text="Incomes ">
+               <items>
+                  <MenuItem fx:id="manageIncomeBtn" mnemonicParsing="false" onAction="#manageIncomes" text="Manage" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Expenses">
+               <items>
+                  <MenuItem fx:id="manageExpensesBtn" mnemonicParsing="false" onAction="#manageExpenses" text="Manage" />
+               </items>
+            </Menu>
+                <Menu mnemonicParsing="false" text="Previous Page">
+                    <items>
+                        <MenuItem fx:id="goToMenu" mnemonicParsing="false" onAction="#returnToMainMenuPage" text="Main menu" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <AnchorPane layoutY="27.0" prefHeight="200.0" prefWidth="200.0">
+            <children>
+                <TreeView fx:id="treeView" prefHeight="412.0" prefWidth="247.0" />
+            </children>
+        </AnchorPane>
+        <AnchorPane layoutX="244.0" layoutY="27.0" prefHeight="106.0" prefWidth="363.0">
+            <children>
+                <Button fx:id="viewDetails" layoutX="60.0" layoutY="17.0" mnemonicParsing="false" onAction="#viewCategoryDetails" prefHeight="25.0" prefWidth="213.0" text="View  Category Details" />
+              <Button fx:id="delete" layoutX="60.0" layoutY="53.0" mnemonicParsing="false" onAction="#deleteCategory" prefHeight="25.0" prefWidth="213.0" text="Delete" />
+            </children>
+        </AnchorPane>
+        <AnchorPane layoutX="240.0" layoutY="131.0" prefHeight="269.0" prefWidth="363.0">
+            <children>
+                <ListView fx:id="showData" layoutX="6.0" prefHeight="307.0" prefWidth="363.0" />
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>

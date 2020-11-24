@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXcontrollers.individualPerson.UpdateIndividualPersonPageController">
+    <children>
+        <AnchorPane layoutX="13.0" layoutY="16.0" prefHeight="368.0" prefWidth="574.0">
+            <children>
+                <Label layoutX="26.0" layoutY="21.0" text="Update Individual Person">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Label>
+                <Label layoutX="26.0" layoutY="51.0" text="Id" />
+                <TextField fx:id="id" layoutX="26.0" layoutY="68.0" />
+                <Label layoutX="30.0" layoutY="103.0" text="Login Name" />
+                <Label layoutX="30.0" layoutY="158.0" text="Password" />
+                <TextField fx:id="loginName" layoutX="30.0" layoutY="123.0" />
+                <Label layoutX="342.0" layoutY="50.0" text="Phone Number" />
+                <TextField fx:id="phoneNumber" layoutX="342.0" layoutY="67.0" />
+                <Label layoutX="342.0" layoutY="108.0" text="Email" />
+                <TextField fx:id="email" layoutX="342.0" layoutY="125.0" />
+                <Label layoutX="342.0" layoutY="217.0" text="Surname" />
+                <TextField fx:id="surname" layoutX="342.0" layoutY="238.0" />
+                <Button fx:id="update" layoutX="232.0" layoutY="317.0" mnemonicParsing="false" onAction="#updateIndividualPerson" text="Update" />
+                <PasswordField fx:id="password" layoutX="30.0" layoutY="173.0" />
+                <Label layoutX="342.0" layoutY="169.0" text="Name" />
+                <TextField fx:id="name" layoutX="342.0" layoutY="184.0" />
+            <Button fx:id="cancel" layoutX="300.0" layoutY="317.0" mnemonicParsing="false" onAction="#returnToIndividualPersonMainPage" text="Cancel" />
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="FXcontrollers.company.AddCompanyPageController">
+    <children>
+        <AnchorPane prefHeight="400.0" prefWidth="606.0">
+            <children>
+                <Label layoutX="40.0" layoutY="21.0" text="Add new Company ">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Label>
+                <Label layoutX="40.0" layoutY="56.0" text="Id " />
+                <TextField fx:id="id" layoutX="40.0" layoutY="73.0" />
+                <Label layoutX="40.0" layoutY="112.0" text="Name " />
+                <TextField fx:id="name" layoutX="40.0" layoutY="129.0" />
+                <Label layoutX="40.0" layoutY="170.0" text="Login Name" />
+                <TextField fx:id="loginName" layoutX="40.0" layoutY="187.0" />
+                <Label layoutX="40.0" layoutY="227.0" text="Password" />
+                <Label layoutX="350.0" layoutY="56.0" text="Phone Number" />
+                <TextField fx:id="phoneNumber" layoutX="350.0" layoutY="73.0" />
+                <Label layoutX="350.0" layoutY="112.0" text="Email" />
+                <TextField fx:id="email" layoutX="350.0" layoutY="129.0" />
+                <Label layoutX="350.0" layoutY="170.0" text="Contact Person Name" />
+                <TextField fx:id="contactPersonName" layoutX="350.0" layoutY="187.0" />
+                <Label layoutX="350.0" layoutY="231.0" text="Contact Person Surname" />
+                <TextField fx:id="contactPersonSurname" layoutX="350.0" layoutY="248.0" />
+                <Button fx:id="addCompany" layoutX="238.0" layoutY="317.0" mnemonicParsing="false" onAction="#addCompanyUser" text="Add User" />
+                <PasswordField fx:id="password" layoutX="40.0" layoutY="244.0" />
+            <Button fx:id="cancel" layoutX="313.0" layoutY="317.0" mnemonicParsing="false" onAction="#returnToCompanyMainPage" text="Cancel" />
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>
