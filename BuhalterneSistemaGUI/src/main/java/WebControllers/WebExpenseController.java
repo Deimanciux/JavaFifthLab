@@ -3,11 +3,14 @@ package WebControllers;
 import FXcontrollers.AbstractController;
 import GSONSerializable.AllExpenseGsonSerializer;
 import GSONSerializable.ExpenseGsonSerializer;
+import HibernateRepository.CategoryRepository;
 import HibernateRepository.ExpenseRepository;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import dataStructures.Category;
 import dataStructures.Expense;
+import dataStructures.Income;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +23,7 @@ import java.util.Properties;
 @Controller
 public class WebExpenseController extends AbstractController {
     ExpenseRepository expenseRepository = new ExpenseRepository(entityManagerFactory);
+    CategoryRepository categoryRepository = new CategoryRepository(entityManagerFactory);
 
     @RequestMapping(value = "/expense", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
@@ -67,6 +71,30 @@ public class WebExpenseController extends AbstractController {
 
         try {
             Expense expense = new Expense(Double.parseDouble(amount), description, expenseTaker, LocalDateTime.now());
+            expenseRepository.create(expense);
+        } catch (Exception e) {
+            System.out.println("Creation failed");
+        }
+    }
+
+    @RequestMapping(value = "{id}/add-expense", method = RequestMethod.POST)
+    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseBody
+    public void addExpenseToCategory(@PathVariable("id") Integer category_id, @RequestBody String request) {
+        if (category_id == null) {
+            System.out.println("No category chosen to add income");
+            return;
+        }
+
+        Category category = categoryRepository.getCategoryById(category_id);
+        Gson parser = new Gson();
+        Properties data = parser.fromJson(request, Properties.class);
+        String amount = data.getProperty("amount");
+        String description = data.getProperty("description");
+        String expenseTaker = data.getProperty("expenseTaker");
+
+        try {
+            Expense expense = new Expense(Double.parseDouble(amount), description, expenseTaker, LocalDateTime.now(), category);
             expenseRepository.create(expense);
         } catch (Exception e) {
             System.out.println("Creation failed");

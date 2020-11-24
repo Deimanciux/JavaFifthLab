@@ -1,7 +1,6 @@
 package HibernateRepository;
 
 import dataStructures.Category;
-import dataStructures.Income;
 import dataStructures.User;
 
 import javax.persistence.EntityManager;

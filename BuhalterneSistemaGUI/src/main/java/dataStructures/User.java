@@ -1,5 +1,6 @@
 package dataStructures;
 
+import HibernateRepository.IncomeRepository;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -7,6 +8,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class User implements Serializable {
@@ -215,6 +217,11 @@ public class User implements Serializable {
     public void setFinanceManagementSystem(FinanceManagementSystem financeManagementSystem) {
         this.financeManagementSystem = financeManagementSystem;
         financeManagementSystem.addUser(this);
+    }
+
+    public void removeCategoryById(int id) {
+        Category category = categories.stream().filter(category1 -> category1.getId() == id).findFirst().orElse(null);
+        categories.remove(category);
     }
 
     public void removeCategory(Category category) {

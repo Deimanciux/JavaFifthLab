@@ -3,10 +3,12 @@ package WebControllers;
 import FXcontrollers.AbstractController;
 import GSONSerializable.AllUsersGsonSerializer;
 import GSONSerializable.UserGsonSerializer;
+import HibernateRepository.FinanceManagementSystemRepository;
 import HibernateRepository.UserRepository;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import dataStructures.FinanceManagementSystem;
 import dataStructures.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -18,7 +20,8 @@ import java.util.Properties;
 
 @Controller
 public class WebUserController extends AbstractController {
-    UserRepository userRepository = new UserRepository(entityManagerFactory);
+    private final UserRepository userRepository = new UserRepository(entityManagerFactory);
+    private final FinanceManagementSystemRepository financeManagementSystemRepository = new FinanceManagementSystemRepository(entityManagerFactory);
 
     @RequestMapping(value = "user", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
@@ -65,12 +68,47 @@ public class WebUserController extends AbstractController {
         String password = data.getProperty("password");
         String type = data.getProperty("type");
 
-        try {
-            User user = new User(name, loginName, password, type);
-            userRepository.create(user);
-        } catch (Exception e) {
-            System.out.println("Creation failed");
-        }
+        User user = new User(name, loginName, password, type);
+        userRepository.create(user);
+    }
+
+    @RequestMapping(value = "individual", method = RequestMethod.POST)
+    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseBody
+    public void addIndividual(@RequestBody String request) {
+        Gson parser = new Gson();
+        Properties data = parser.fromJson(request, Properties.class);
+        String name = data.getProperty("name");
+        String loginName = data.getProperty("loginName");
+        String password = data.getProperty("password");
+        String email = data.getProperty("email");
+        String phoneNumber = data.getProperty("phoneNumber");
+        String surname = data.getProperty("surname");
+        String fms_id = data.getProperty("fms_id");
+        FinanceManagementSystem fms = financeManagementSystemRepository.getFmsById(Integer.parseInt(fms_id));
+
+        User user = new User(name, loginName, password, email, phoneNumber, User.TYPE_INDIVIDUAL, surname, fms);
+        userRepository.create(user);
+    }
+
+    @RequestMapping(value = "company", method = RequestMethod.POST)
+    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseBody
+    public void addCompany(@RequestBody String request) {
+        Gson parser = new Gson();
+        Properties data = parser.fromJson(request, Properties.class);
+        String name = data.getProperty("name");
+        String loginName = data.getProperty("loginName");
+        String password = data.getProperty("password");
+        String email = data.getProperty("email");
+        String phoneNumber = data.getProperty("phoneNumber");
+        String contactPersonName = data.getProperty("contactPersonName");
+        String contactPersonSurname = data.getProperty("contactPersonSurname");
+        String fms_id = data.getProperty("fms_id");
+        FinanceManagementSystem fms = financeManagementSystemRepository.getFmsById(Integer.parseInt(fms_id));
+
+        User user = new User(name, loginName, password, email, phoneNumber, User.TYPE_COMPANY, contactPersonName, contactPersonSurname, fms);
+        userRepository.create(user);
     }
 
     @RequestMapping(value = "user/{id}", method = RequestMethod.PUT)
@@ -88,12 +126,15 @@ public class WebUserController extends AbstractController {
         String name = data.getProperty("name");
         String loginName = data.getProperty("loginName");
         String password = data.getProperty("password");
-        String type = data.getProperty("type");
+        String email = data.getProperty("email");
+        String phoneNumber = data.getProperty("phoneNumber");
+
 
         user.setName(name);
         user.setLoginName(loginName);
         user.setPassword(password);
-        user.setType(type);
+        user.setEmail(email);
+        user.setPhoneNumber(phoneNumber);
         userRepository.edit(user);
     }
 

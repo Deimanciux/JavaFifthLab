@@ -48,7 +48,6 @@ public class AddResponsiblePeoplePageController extends AbstractController imple
     }
 
     public void addResponsiblePerson() {
-
         User user = userChoice.getSelectionModel().getSelectedItem();
         user.addCategory(category);
         userRepository.edit(user);
@@ -58,8 +57,6 @@ public class AddResponsiblePeoplePageController extends AbstractController imple
     }
 
     private void initializeUsersChoiceBox() {
-        System.out.println(fms.getUsers());
-        System.out.println(category);
         for (User user : fms.getUsers()) {
             if (!checkIfUserExistsInCategory(user)) {
                 userList.add(user);

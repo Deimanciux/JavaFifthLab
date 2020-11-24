@@ -3,10 +3,12 @@ package WebControllers;
 import FXcontrollers.AbstractController;
 import GSONSerializable.AllIncomeGsonSerializer;
 import GSONSerializable.IncomeGsonSerializer;
+import HibernateRepository.CategoryRepository;
 import HibernateRepository.IncomeRepository;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import dataStructures.Category;
 import dataStructures.Income;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,7 @@ import java.util.Properties;
 @Controller
 public class WebIncomeController extends AbstractController {
     IncomeRepository incomeRepository = new IncomeRepository(entityManagerFactory);
+    CategoryRepository categoryRepository = new CategoryRepository(entityManagerFactory);
 
     @RequestMapping(value = "/income", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
@@ -67,6 +70,30 @@ public class WebIncomeController extends AbstractController {
 
         try {
             Income income = new Income(Double.parseDouble(amount), description, incomeGiver, LocalDateTime.now());
+            incomeRepository.create(income);
+        } catch (Exception e) {
+            System.out.println("Creation failed");
+        }
+    }
+
+    @RequestMapping(value = "{id}/add-income", method = RequestMethod.POST)
+    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseBody
+    public void addIncomeToCategory(@PathVariable("id") Integer category_id, @RequestBody String request) {
+        if (category_id == null) {
+            System.out.println("No category chosen to add income");
+            return;
+        }
+
+        Category category = categoryRepository.getCategoryById(category_id);
+        Gson parser = new Gson();
+        Properties data = parser.fromJson(request, Properties.class);
+        String amount = data.getProperty("amount");
+        String description = data.getProperty("description");
+        String incomeGiver = data.getProperty("incomeGiver");
+
+        try {
+            Income income = new Income(Double.parseDouble(amount), description, incomeGiver, LocalDateTime.now(), category);
             incomeRepository.create(income);
         } catch (Exception e) {
             System.out.println("Creation failed");
