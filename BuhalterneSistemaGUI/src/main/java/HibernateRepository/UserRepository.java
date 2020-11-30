@@ -125,4 +125,27 @@ public class UserRepository {
 
         return null;
     }
+
+    public User getUserByLogin(String login) {
+        EntityManager entityManager = null;
+
+        try {
+            entityManager = getEntityManager();
+            entityManager.getTransaction().begin();
+
+            String queryText = "FROM User WHERE loginName = :login";
+            Query query = entityManager.createQuery(queryText);
+            query.setParameter("login", login);
+
+            return (User) query.getSingleResult();
+        } catch (Exception e) {
+            System.out.println("No such user");
+        } finally {
+            if (entityManager != null) {
+                entityManager.close();
+            }
+        }
+
+        return null;
+    }
 }

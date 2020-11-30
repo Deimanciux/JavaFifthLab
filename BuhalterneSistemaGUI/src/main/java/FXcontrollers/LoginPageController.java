@@ -1,13 +1,12 @@
 package FXcontrollers;
 
-import FXcontrollers.company.AddCompanyPageController;
-import FXcontrollers.individualPerson.AddIndividualPersonPageController;
+import FXcontrollers.registration.RegistrationPageController;
 import HibernateRepository.FinanceManagementSystemRepository;
 import HibernateRepository.UserRepository;
+import Utils.ErrorPrinter;
 import Utils.LinksToPages;
 import dataStructures.FinanceManagementSystem;
 import dataStructures.User;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -15,27 +14,21 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class LoginPageController extends AbstractController implements Initializable {
+    public TextField signInLogInName;
     public TextField signInPassword;
     public Button signIn = new Button();
     public Button register;
-    public TextField signInLogInName;
 
-    private FinanceManagementSystem fms = null;
-    private boolean isIndividualPerson = false;
-    private boolean isCompany = false;
+    private FinanceManagementSystem fms;
     private User user;
-    private UserRepository userRepository;
-    private FinanceManagementSystemRepository financeManagementSystemRepository;
+    private final UserRepository userRepository;
+    private final FinanceManagementSystemRepository financeManagementSystemRepository;
 
     public LoginPageController() {
         this.userRepository = new UserRepository(entityManagerFactory);
@@ -46,102 +39,50 @@ public class LoginPageController extends AbstractController implements Initializ
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         fms = financeManagementSystemRepository.getFmsById(1);
-
-        getUserType();
-    }
-
-    private void getUserType() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("User Types");
-        alert.setHeaderText("Choose User You Want To Work With");
-        alert.setContentText("Choose your option.");
-
-        ButtonType buttonTypeOne = new ButtonType("Individual");
-        ButtonType buttonTypeTwo = new ButtonType("Company");
-        ButtonType buttonTypeThree = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-
-        alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeThree);
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == buttonTypeOne) {
-            isIndividualPerson = true;
-        } else if (result.get() == buttonTypeTwo) {
-            isCompany = true;
-        } else {
-            Platform.exit();
-        }
     }
 
     public void validateUser() throws IOException {
-        this.user = this.userRepository.getUserById(7);
+        user = userRepository.getUserByLogin(signInLogInName.getText());
+
+        if (user == null) {
+            ErrorPrinter.printError("User with given credentials was not found");
+            return;
+        }
+
+        if (!user.getPassword().equals(signInPassword.getText())) {
+            ErrorPrinter.printError("User with given credentials was not found");
+            return;
+        }
+
         loadMainMenuPage();
-
-//       if(isUserWithEnteredDataExists() ) {
-//            loadMainMenuPage();
-//        } else {
-//            noSuchUser();
-//        }
-    }
-
-    private boolean isUserWithEnteredDataExists() {
-        return fms.getUsers().stream().anyMatch(
-                user -> user.getLoginName().equals(signInLogInName.getText()) &&
-                        user.getPassword().equals(signInPassword.getText()));
-    }
-
-    private void noSuchUser() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Finance Management System");
-        alert.setHeaderText("No such user");
-        alert.setContentText("User with given credentials was not found. Contact the administrator.");
-        alert.showAndWait();
-    }
-
-    public void sendToRegistration() {
-//        if (isIndividualPerson) {
-//            loadIndividualPersonRegistration();
-//        } else {
-//            loadCompanyRegistration();
-//        }
     }
 
     private void loadMainMenuPage() throws IOException {
-        new LinksToPages().returnToMainMenuPage(signIn, fms, user);
+        if(user.getType().equals(User.TYPE_INDIVIDUAL) || user.getType().equals(User.TYPE_COMPANY)) {
+            new LinksToPages().goToMainMenuUserPage(signIn, fms, user);
+            return;
+        }
+
+        if(user.getType().equals(User.TYPE_ADMIN)) {
+            new LinksToPages().returnToMainMenuPage(signIn, fms, user);
+        }
     }
 
-//    private void loadIndividualPersonRegistration() {
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/individualPerson/AddIndividualPersonPage.fxml"));
-//        Parent root = null;
-//        try {
-//            root = loader.load();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        AddIndividualPersonPageController addIndividualPersonPageController = loader.getController();
-//        addIndividualPersonPageController.setFms(fms);
-//
-//        Stage stage = (Stage) signIn.getScene().getWindow();
-//        assert root != null;
-//        stage.setScene(new Scene(root));
-//        stage.show();
-//    }
-//
-//    private void loadCompanyRegistration() {
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/company/AddCompanyPage.fxml"));
-//        Parent root = null;
-//        try {
-//            root = loader.load();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        AddCompanyPageController addCompanyPageController = loader.getController();
-//        addCompanyPageController.setFms(fms);
-//
-//        Stage stage = (Stage) signIn.getScene().getWindow();
-//        assert root != null;
-//        stage.setScene(new Scene(root));
-//        stage.show();
-//    }
+    public void sendToRegistration() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/registration/RegistrationPage.fxml"));
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        RegistrationPageController registrationPageController = loader.getController();
+        registrationPageController.setFms(fms);
+
+        Stage stage = (Stage) signIn.getScene().getWindow();
+        assert root != null;
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
 }

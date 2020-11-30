@@ -1,6 +1,5 @@
 package dataStructures;
 
-import HibernateRepository.IncomeRepository;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -8,12 +7,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 public class User implements Serializable {
     public static final String TYPE_INDIVIDUAL = "individual";
     public static final String TYPE_COMPANY = "company";
+    public static final String TYPE_ADMIN = "admin";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +37,25 @@ public class User implements Serializable {
     @ManyToOne
     @LazyCollection(LazyCollectionOption.FALSE)
     private FinanceManagementSystem financeManagementSystem;
+
+    //registracijos forma
+    public User(
+            String name,
+            String loginName,
+            String password,
+            String email,
+            String phoneNumber,
+            String type,
+            FinanceManagementSystem fms
+    ) {
+        this.name = name;
+        this.loginName = loginName;
+        this.password = password;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.type = type;
+        this.financeManagementSystem = fms;
+    }
 
     public User(String name, String loginName, String password, String email, String phoneNumber, String type, String surname, FinanceManagementSystem fms) {
         this.name = name;

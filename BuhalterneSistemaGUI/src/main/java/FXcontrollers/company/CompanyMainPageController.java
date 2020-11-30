@@ -80,23 +80,7 @@ public class CompanyMainPageController extends AbstractController implements Ini
             return;
         }
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../../FXML/company/UpdateCompanyPage.fxml"));
-        Parent root = null;
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        UpdateCompanyPageController updateCompanyPageController = loader.getController();
-        updateCompanyPageController.setFms(fms);
-        updateCompanyPageController.setUser(user);
-        updateCompanyPageController.setCompany(getCompanyFromSelection());
-
-        Stage stage = (Stage) delete.getScene().getWindow();
-        assert root != null;
-        stage.setScene(new Scene(root));
-        stage.show();
+        new LinksToPages().goToCompanyUpdatePage(delete, fms, user, getCompanyFromSelection());
     }
 
     public void returnToMainMenuPage() throws IOException {

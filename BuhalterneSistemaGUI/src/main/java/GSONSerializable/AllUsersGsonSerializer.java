@@ -8,7 +8,7 @@ import dataStructures.User;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class AllUsersGsonSerializer implements JsonSerializer<List<User>>{
+public class AllUsersGsonSerializer implements JsonSerializer<List<User>> {
     @Override
     public JsonElement serialize(List<User> users, Type type, JsonSerializationContext jsonSerializationContext) {
         JsonArray jsonArray = new JsonArray();
@@ -17,7 +17,7 @@ public class AllUsersGsonSerializer implements JsonSerializer<List<User>>{
         gsonBuilder.registerTypeAdapter(User.class, new FmsGsonSerializer());
         Gson parser = gsonBuilder.create();
 
-        for(User user : users) {
+        for (User user : users) {
             jsonArray.add(parser.toJson(user));
         }
 

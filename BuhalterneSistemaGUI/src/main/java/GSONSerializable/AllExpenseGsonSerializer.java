@@ -15,7 +15,7 @@ public class AllExpenseGsonSerializer implements JsonSerializer<List<Expense>> {
         gsonBuilder.registerTypeAdapter(Expense.class, new ExpenseGsonSerializer());
         Gson parser = gsonBuilder.create();
 
-        for(Expense expense : expenses) {
+        for (Expense expense : expenses) {
             jsonArray.add(parser.toJson(expense));
         }
 

@@ -15,7 +15,7 @@ public class AllCategoryGsonSerializer implements JsonSerializer<List<Category>>
         gsonBuilder.registerTypeAdapter(Category.class, new ExpenseGsonSerializer());
         Gson parser = gsonBuilder.create();
 
-        for(Category category : categories) {
+        for (Category category : categories) {
             jsonArray.add(parser.toJson(category));
         }
 

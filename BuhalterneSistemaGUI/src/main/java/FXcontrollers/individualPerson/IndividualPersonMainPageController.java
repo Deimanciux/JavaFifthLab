@@ -74,24 +74,7 @@ public class IndividualPersonMainPageController extends AbstractController imple
             return;
         }
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(
-                "../../FXML/IndividualPerson/UpdateIndividualPersonPage.fxml"));
-        Parent root = null;
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        UpdateIndividualPersonPageController updateIndividualPersonPageController = loader.getController();
-        updateIndividualPersonPageController.setFms(fms);
-        updateIndividualPersonPageController.setUser(user);
-        updateIndividualPersonPageController.setIndividualPerson(getIndividualPersonFromSelection());
-
-        Stage stage = (Stage) delete.getScene().getWindow();
-        assert root != null;
-        stage.setScene(new Scene(root));
-        stage.show();
+        new LinksToPages().goToIndividualPersonUpdatePage(delete, fms, user, getIndividualPersonFromSelection());
     }
 
     private void showAllIndividualPersons() {

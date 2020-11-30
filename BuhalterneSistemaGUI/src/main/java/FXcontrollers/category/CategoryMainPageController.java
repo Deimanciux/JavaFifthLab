@@ -5,9 +5,7 @@ import HibernateRepository.CategoryRepository;
 import HibernateRepository.FinanceManagementSystemRepository;
 import Utils.ErrorPrinter;
 import Utils.LinksToPages;
-import dataStructures.Category;
-import dataStructures.FinanceManagementSystem;
-import dataStructures.User;
+import dataStructures.*;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -33,26 +31,63 @@ public class CategoryMainPageController extends AbstractController implements In
     public MenuItem deleteUsers;
     public MenuItem manageIncomeBtn;
     public MenuItem manageExpensesBtn;
+    public Button viewDetailsSystem;
+    public Button viewDetailsCategory;
+    public Label systemBalance;
+    public Label categoryBalance;
 
     private FinanceManagementSystem fms;
     private User user;
     private CategoryRepository categoryRepository;
     private FinanceManagementSystemRepository financeManagementSystemRepository;
+    private double systemIncome;
+    private double systemExpense;
+    private double systemBalanceAmount;
+    private double categoryIncome;
+    private double categoryExpense;
+    private double categoryBalanceAmount;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         categoryRepository = new CategoryRepository(entityManagerFactory);
         financeManagementSystemRepository = new FinanceManagementSystemRepository(entityManagerFactory);
+        categoryBalance.setText("0.00");
     }
 
     public void setFms(FinanceManagementSystem fms) {
         this.fms = fms;
         this.fms = financeManagementSystemRepository.getFmsById(fms.getId());
-        fillCategoryTreeView();
+
+//        if(user.equals(User.TYPE_COMPANY) || user.equals(User.TYPE_INDIVIDUAL)) {
+//
+//        } else {
+            fillCategoryTreeView();
+//        }
+
+        getSystemBalance();
     }
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    private void getSystemBalance() {
+        systemIncome = 0;
+        systemExpense = 0;
+        systemBalanceAmount = 0;
+
+        for (Category category : fms.getCategories()) {
+            for (Income categoryIncome : category.getIncomes()) {
+                systemIncome += categoryIncome.getAmount();
+            }
+
+            for (Expense categoryExpense : category.getExpenses()) {
+                systemExpense += categoryExpense.getAmount();
+            }
+        }
+
+        systemBalanceAmount = systemIncome - systemExpense;
+        systemBalance.setText(String.valueOf(String.format("%.2f", systemBalanceAmount)));
     }
 
     private void fillCategoryTreeView() {
@@ -85,7 +120,7 @@ public class CategoryMainPageController extends AbstractController implements In
 
     private Category getLeadSelect() {
 
-        if (treeView.getSelectionModel().getSelectedItem() == null) {
+        if (isNotItemSelectedOnTreeView()) {
             ErrorPrinter.printError("No fields was selected");
             return null;
         }
@@ -246,5 +281,75 @@ public class CategoryMainPageController extends AbstractController implements In
         }
 
         new LinksToPages().goToExpenseMainPage(viewDetails, fms, user, getLeadSelect());
+    }
+
+    public void showBalanceDialog(double balance, double income, double expense) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("System balance dialog");
+        alert.setHeaderText(null);
+        alert.setContentText("Balance: " +
+                String.format("%.2f", balance) +
+                "\n" + "Income amount: " +
+                String.format("%.2f", income) +
+                "\n" + "Expense amount: " +
+                String.format("%.2f", expense)
+        );
+
+        alert.showAndWait();
+    }
+
+    public void showSystemBalanceDetails() {
+        showBalanceDialog(systemBalanceAmount, systemIncome, systemExpense);
+    }
+
+    public void showCategoryBalanceDetails() {
+        showBalanceDialog(categoryBalanceAmount, categoryIncome, categoryExpense);
+    }
+
+    private boolean isNotItemSelectedOnTreeView() {
+        return treeView.getSelectionModel().getSelectedItem() == null;
+    }
+
+    private void countCategoryBalance(List<Category> categories) {
+        for(Category category : categories) {
+            countIncomeBalanceOfCategory(category);
+            countExpenseBalanceOfCategory(category);
+
+            if(category.getSubCategories().size() > 0) {
+                countCategoryBalance(category.getSubCategories());
+            }
+        }
+    }
+
+    private void countIncomeBalanceOfCategory(Category category) {
+        for(Income income : category.getIncomes()) {
+            categoryIncome += income.getAmount();
+        }
+    }
+
+    private void countExpenseBalanceOfCategory(Category category) {
+        for(Expense expense : category.getExpenses()) {
+            categoryExpense += expense.getAmount();
+        }
+    }
+
+    public void showSelected() {
+        Category category;
+        List<Category> categories = new ArrayList<>();
+
+        if (isNotItemSelectedOnTreeView()) {
+            return;
+        }
+
+        categoryIncome = 0;
+        categoryExpense = 0;
+        categoryBalanceAmount = 0;
+
+        category = getLeadSelect();
+        categories.add(category);
+        countCategoryBalance(categories);
+
+        categoryBalanceAmount = categoryIncome - categoryExpense;
+        categoryBalance.setText(String.valueOf(String.format("%.2f", categoryBalanceAmount)));
     }
 }

@@ -1,11 +1,14 @@
 package Utils;
 
+import FXcontrollers.MainMenuUserPageController;
 import FXcontrollers.category.CategoryMainPageController;
 import FXcontrollers.MainMenuPageController;
 import FXcontrollers.company.CompanyMainPageController;
+import FXcontrollers.company.UpdateCompanyPageController;
 import FXcontrollers.expense.ExpenseMainPageController;
 import FXcontrollers.income.IncomeMainPageController;
 import FXcontrollers.individualPerson.IndividualPersonMainPageController;
+import FXcontrollers.individualPerson.UpdateIndividualPersonPageController;
 import dataStructures.Category;
 import dataStructures.FinanceManagementSystem;
 import dataStructures.User;
@@ -26,6 +29,19 @@ public class LinksToPages {
         MainMenuPageController mainMenuPageController = loader.getController();
         mainMenuPageController.setFms(fms);
         mainMenuPageController.setUser(user);
+
+        Stage stage = (Stage) pageStageIdentifier.getScene().getWindow();
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
+    public void goToMainMenuUserPage(Button pageStageIdentifier, FinanceManagementSystem fms, User user) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/MainMenuUserPage.fxml"));
+        Parent root = loader.load();
+
+        MainMenuUserPageController mainMenuUserPageController = loader.getController();
+        mainMenuUserPageController.setFms(fms);
+        mainMenuUserPageController.setUser(user);
 
         Stage stage = (Stage) pageStageIdentifier.getScene().getWindow();
         stage.setScene(new Scene(root));
@@ -122,6 +138,65 @@ public class LinksToPages {
         expenseMainPageController.setFms(fms);
         expenseMainPageController.setUser(user);
         expenseMainPageController.setCategory(category);
+
+        Stage stage = (Stage) pageStageIdentifier.getScene().getWindow();
+        assert root != null;
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
+    public void goToLoginPage(Button pageStageIdentifier) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/LoginPage.fxml"));
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        loader.getController();
+
+        Stage stage = (Stage) pageStageIdentifier.getScene().getWindow();
+        assert root != null;
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
+    public void goToIndividualPersonUpdatePage(Button pageStageIdentifier, FinanceManagementSystem fms, User user, User userToBeUpdated) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                "../FXML/IndividualPerson/UpdateIndividualPersonPage.fxml"));
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        UpdateIndividualPersonPageController updateIndividualPersonPageController = loader.getController();
+        updateIndividualPersonPageController.setFms(fms);
+        updateIndividualPersonPageController.setUser(user);
+        updateIndividualPersonPageController.setIndividualPerson(userToBeUpdated);
+
+        Stage stage = (Stage) pageStageIdentifier.getScene().getWindow();
+        assert root != null;
+        stage.setScene(new Scene(root));
+        stage.show();
+
+    }
+
+    public void goToCompanyUpdatePage(Button pageStageIdentifier, FinanceManagementSystem fms, User user, User userToBeUpdated) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/company/UpdateCompanyPage.fxml"));
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        UpdateCompanyPageController updateCompanyPageController = loader.getController();
+        updateCompanyPageController.setFms(fms);
+        updateCompanyPageController.setUser(user);
+        updateCompanyPageController.setCompany(userToBeUpdated);
 
         Stage stage = (Stage) pageStageIdentifier.getScene().getWindow();
         assert root != null;

@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -54,7 +55,7 @@ public class UpdateIndividualPersonPageController extends AbstractController imp
         financeManagementSystemRepository = new FinanceManagementSystemRepository(entityManagerFactory);
     }
 
-    public void updateIndividualPerson() {
+    public void updateIndividualPerson() throws IOException {
         if (!checkIfFieldsAreEmpty()) {
             ErrorPrinter.printError("Fields can not be empty");
             return;
@@ -79,7 +80,7 @@ public class UpdateIndividualPersonPageController extends AbstractController imp
             return;
         }
 
-        returnToIndividualPersonMainPage();
+        returnToPreviousPage();
     }
 
     private boolean checkIfFieldsAreEmpty() {
@@ -94,7 +95,11 @@ public class UpdateIndividualPersonPageController extends AbstractController imp
         return text != null && !text.equals("");
     }
 
-    public void returnToIndividualPersonMainPage() {
-        new LinksToPages().goToIndividualPersonMainPage(update, fms, user);
+    public void returnToPreviousPage() throws IOException {
+        if (user.getType().equals(User.TYPE_ADMIN)) {
+            new LinksToPages().goToIndividualPersonMainPage(update, fms, user);
+        } else {
+            new LinksToPages().returnToMainMenuPage(cancel, fms, user);
+        }
     }
 }

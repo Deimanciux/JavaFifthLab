@@ -15,7 +15,8 @@ public class MainMenuPageController implements Initializable {
     public Button categories;
     public Button individualUsers;
     public Button companyUsers;
-    public Button exit;
+    public Button logOut;
+    public Button profile;
 
     private FinanceManagementSystem fms = new FinanceManagementSystem();
     private User user;
@@ -47,5 +48,13 @@ public class MainMenuPageController implements Initializable {
     public void exitProgram() {
         Stage stage = (Stage) categories.getScene().getWindow();
         stage.close();
+    }
+
+    public void returnToLoginPage() {
+        new LinksToPages().goToLoginPage(logOut);
+    }
+
+    public void editProfile() {
+        new LinksToPages().goToIndividualPersonUpdatePage(logOut, fms, user, user);
     }
 }

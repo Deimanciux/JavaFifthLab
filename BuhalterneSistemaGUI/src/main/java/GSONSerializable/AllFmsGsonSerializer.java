@@ -15,7 +15,7 @@ public class AllFmsGsonSerializer implements JsonSerializer<List<FinanceManageme
         gsonBuilder.registerTypeAdapter(FinanceManagementSystem.class, new FmsGsonSerializer());
         Gson parser = gsonBuilder.create();
 
-        for(FinanceManagementSystem fms : financeManagementSystems) {
+        for (FinanceManagementSystem fms : financeManagementSystems) {
             jsonArray.add(parser.toJson(fms));
         }
 

@@ -28,7 +28,7 @@
             <TextField fx:id="email" layoutX="352.0" layoutY="63.0" />
             <Button fx:id="add" layoutX="238.0" layoutY="317.0" mnemonicParsing="false" onAction="#addUser" text="Add User" />
             <PasswordField fx:id="password" layoutX="40.0" layoutY="183.0" />
-            <Button fx:id="cancel" layoutX="313.0" layoutY="317.0" mnemonicParsing="false" onAction="#returnToCompanyMainPage" text="Cancel" />
+            <Button fx:id="cancel" layoutX="313.0" layoutY="317.0" mnemonicParsing="false" onAction="#goToLoginPage" text="Cancel" />
             <RadioButton fx:id="isIndividualPerson" layoutX="349.0" layoutY="166.0" mnemonicParsing="false" text="Individual person" />
             <RadioButton fx:id="isCompany" layoutX="349.0" layoutY="192.0" mnemonicParsing="false" text="Company" />
          </children>
