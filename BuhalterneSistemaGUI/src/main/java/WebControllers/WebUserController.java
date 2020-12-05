@@ -5,6 +5,7 @@ import GSONSerializable.AllUsersGsonSerializer;
 import GSONSerializable.UserGsonSerializer;
 import HibernateRepository.FinanceManagementSystemRepository;
 import HibernateRepository.UserRepository;
+import Utils.ErrorPrinter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Properties;
@@ -23,7 +25,7 @@ public class WebUserController extends AbstractController {
     private final UserRepository userRepository = new UserRepository(entityManagerFactory);
     private final FinanceManagementSystemRepository financeManagementSystemRepository = new FinanceManagementSystemRepository(entityManagerFactory);
 
-    @RequestMapping(value = "user", method = RequestMethod.GET)
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public String getUsers() {
@@ -42,7 +44,7 @@ public class WebUserController extends AbstractController {
         return parser.toJson(users);
     }
 
-    @RequestMapping(value = "user/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public String getUser(@PathVariable("id") Integer id) {
@@ -57,7 +59,7 @@ public class WebUserController extends AbstractController {
         return parser.toJson(user);
     }
 
-    @RequestMapping(value = "user", method = RequestMethod.POST)
+    @RequestMapping(value = "/user", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public void addUser(@RequestBody String request) {
@@ -72,7 +74,7 @@ public class WebUserController extends AbstractController {
         userRepository.create(user);
     }
 
-    @RequestMapping(value = "individual", method = RequestMethod.POST)
+    @RequestMapping(value = "/individual", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public void addIndividual(@RequestBody String request) {
@@ -91,7 +93,7 @@ public class WebUserController extends AbstractController {
         userRepository.create(user);
     }
 
-    @RequestMapping(value = "company", method = RequestMethod.POST)
+    @RequestMapping(value = "/company", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public void addCompany(@RequestBody String request) {
@@ -111,7 +113,7 @@ public class WebUserController extends AbstractController {
         userRepository.create(user);
     }
 
-    @RequestMapping(value = "user/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public void updateUser(@PathVariable Integer id, @RequestBody String request) {
@@ -138,15 +140,38 @@ public class WebUserController extends AbstractController {
         userRepository.edit(user);
     }
 
-    @RequestMapping(value = "user/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
-    public void removeFinanceManagementSystem(@PathVariable Integer id) {
+    public void removeUser(@PathVariable Integer id) {
         if (id == null) {
             System.out.println("No system chosen for delete");
             return;
         }
 
         userRepository.remove(id);
+    }
+
+    @RequestMapping(value = "/user/login", method = RequestMethod.POST)
+    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseBody
+    public String loginUser(@RequestBody String request) {
+        Gson parser = new Gson();
+        Properties data = parser.fromJson(request, Properties.class);
+        String loginName = data.getProperty("loginName");
+        String password = data.getProperty("password");
+        String fms_id = data.getProperty("fms_id");
+
+        User user = userRepository.getUserByLogin(loginName);
+
+        if (user == null || user.getFinanceManagementSystem().getId() != Integer.parseInt(fms_id)
+                || !user.getPassword().equals(password)) {
+            return null;
+        }
+
+        GsonBuilder gson = new GsonBuilder();
+        gson.registerTypeAdapter(User.class, new UserGsonSerializer());
+        Gson parser1 = gson.create();
+        return parser1.toJson(user);
     }
 }

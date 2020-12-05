@@ -43,7 +43,7 @@ public class WebIncomeController extends AbstractController {
         return parser.toJson(incomes);
     }
 
-    @RequestMapping(value = "income/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/income/{id}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public String getIncome(@PathVariable("id") Integer id) {
@@ -58,7 +58,7 @@ public class WebIncomeController extends AbstractController {
         return parser.toJson(income);
     }
 
-    @RequestMapping(value = "income", method = RequestMethod.POST)
+    @RequestMapping(value = "/income", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public void addIncome(@RequestBody String request) {
@@ -76,7 +76,7 @@ public class WebIncomeController extends AbstractController {
         }
     }
 
-    @RequestMapping(value = "{id}/add-income", method = RequestMethod.POST)
+    @RequestMapping(value = "/{id}/add-income", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public void addIncomeToCategory(@PathVariable("id") Integer category_id, @RequestBody String request) {
@@ -100,7 +100,7 @@ public class WebIncomeController extends AbstractController {
         }
     }
 
-    @RequestMapping(value = "income/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/income/{id}", method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public void updateIncome(@PathVariable Integer id, @RequestBody String request) {
@@ -122,7 +122,7 @@ public class WebIncomeController extends AbstractController {
         incomeRepository.edit(income);
     }
 
-    @RequestMapping(value = "income/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/income/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public void removeFinanceManagementSystem(@PathVariable Integer id) {

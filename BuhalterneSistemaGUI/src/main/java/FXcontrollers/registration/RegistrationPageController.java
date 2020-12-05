@@ -8,13 +8,8 @@ import Utils.ErrorPrinter;
 import Utils.LinksToPages;
 import dataStructures.FinanceManagementSystem;
 import dataStructures.User;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
-
 
 import java.io.IOException;
 import java.net.URL;
@@ -92,20 +87,6 @@ public class RegistrationPageController extends AbstractController implements In
 
     public void goToLoginPage() {
         new LinksToPages().goToLoginPage(add);
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("../../FXML/LoginPage.fxml"));
-//        Parent root = null;
-//        try {
-//            root = loader.load();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        loader.getController();
-//
-//        Stage stage = (Stage) add.getScene().getWindow();
-//        assert root != null;
-//        stage.setScene(new Scene(root));
-//        stage.show();
     }
 
     private void loadMainMenuPage() throws IOException {

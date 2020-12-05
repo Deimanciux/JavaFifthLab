@@ -16,6 +16,8 @@ public class UserGsonSerializer implements JsonSerializer<User> {
         json.addProperty("id", user.getId());
         json.addProperty("loginName", user.getLoginName());
         json.addProperty("name", user.getName());
+        json.addProperty("surname", user.getSurname());
+        json.addProperty("email", user.getEmail());
 
         return json;
     }

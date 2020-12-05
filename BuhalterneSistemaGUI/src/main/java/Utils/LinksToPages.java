@@ -1,6 +1,5 @@
 package Utils;
 
-import FXcontrollers.MainMenuUserPageController;
 import FXcontrollers.category.CategoryMainPageController;
 import FXcontrollers.MainMenuPageController;
 import FXcontrollers.company.CompanyMainPageController;
@@ -29,19 +28,6 @@ public class LinksToPages {
         MainMenuPageController mainMenuPageController = loader.getController();
         mainMenuPageController.setFms(fms);
         mainMenuPageController.setUser(user);
-
-        Stage stage = (Stage) pageStageIdentifier.getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
-    }
-
-    public void goToMainMenuUserPage(Button pageStageIdentifier, FinanceManagementSystem fms, User user) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/MainMenuUserPage.fxml"));
-        Parent root = loader.load();
-
-        MainMenuUserPageController mainMenuUserPageController = loader.getController();
-        mainMenuUserPageController.setFms(fms);
-        mainMenuUserPageController.setUser(user);
 
         Stage stage = (Stage) pageStageIdentifier.getScene().getWindow();
         stage.setScene(new Scene(root));

@@ -41,7 +41,7 @@ public class WebFinanceManagementSystemController extends AbstractController {
         return parser.toJson(allFms);
     }
 
-    @RequestMapping(value = "fms/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/fms/{id}", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
     public String getFinanceManagementSystem(@PathVariable("id") Integer id) {

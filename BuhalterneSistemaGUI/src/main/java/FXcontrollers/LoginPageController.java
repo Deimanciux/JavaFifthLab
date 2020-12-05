@@ -1,6 +1,7 @@
 package FXcontrollers;
 
 import FXcontrollers.registration.RegistrationPageController;
+import HibernateRepository.CategoryRepository;
 import HibernateRepository.FinanceManagementSystemRepository;
 import HibernateRepository.UserRepository;
 import Utils.ErrorPrinter;
@@ -58,14 +59,7 @@ public class LoginPageController extends AbstractController implements Initializ
     }
 
     private void loadMainMenuPage() throws IOException {
-        if(user.getType().equals(User.TYPE_INDIVIDUAL) || user.getType().equals(User.TYPE_COMPANY)) {
-            new LinksToPages().goToMainMenuUserPage(signIn, fms, user);
-            return;
-        }
-
-        if(user.getType().equals(User.TYPE_ADMIN)) {
-            new LinksToPages().returnToMainMenuPage(signIn, fms, user);
-        }
+        new LinksToPages().returnToMainMenuPage(signIn, fms, user);
     }
 
     public void sendToRegistration() {

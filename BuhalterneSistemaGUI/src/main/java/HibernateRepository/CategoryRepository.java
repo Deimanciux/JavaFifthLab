@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,6 +78,9 @@ public class CategoryRepository {
                 deleteCategoryFromUser(category.getSubCategories());
             }
 
+            category.getFinanceManagementSystem().removeCategory(category);
+            category.setFinanceManagementSystem(null);
+
             entityManager.remove(category);
             entityManager.getTransaction().commit();
         } catch (Exception e) {
@@ -139,5 +143,28 @@ public class CategoryRepository {
                 deleteCategoryFromUser(category.getSubCategories());
             }
         }
+    }
+
+    public Category getCategoryLastInsertedRecord() {
+        EntityManager entityManager = null;
+
+        try {
+            entityManager = getEntityManager();
+            entityManager.getTransaction().begin();
+
+            String queryText = "FROM Category ORDER BY id DESC";
+
+            Query query = entityManager.createQuery(queryText);
+
+            return (Category) query.setMaxResults(1).getSingleResult();
+        } catch (Exception e) {
+            System.out.println("Nepavyko rast id");
+        } finally {
+            if (entityManager != null) {
+                entityManager.close();
+            }
+        }
+
+        return null;
     }
 }

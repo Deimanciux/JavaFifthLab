@@ -138,4 +138,24 @@ WebCategoryController extends AbstractController {
 
         categoryRepository.remove(id);
     }
+
+    @RequestMapping(value = "/user/{id}/categories", method = RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseBody
+    public String getUserCategories(@PathVariable Integer id) {
+        User user = userRepository.getUserById(id);
+        List<Category> categories = user.getCategories();
+        GsonBuilder gsonBuilder = new GsonBuilder();
+
+        gsonBuilder.registerTypeAdapter(Category.class, new CategoryGsonSerializer());
+        Gson parser = gsonBuilder.create();
+        parser.toJson(categories.get(0));
+
+        Type categoryList = new TypeToken<List<Category>>() {
+        }.getType();
+        gsonBuilder.registerTypeAdapter(categoryList, new AllCategoryGsonSerializer());
+        parser = gsonBuilder.create();
+
+        return parser.toJson(categories);
+    }
 }

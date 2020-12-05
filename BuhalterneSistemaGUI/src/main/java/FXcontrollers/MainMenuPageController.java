@@ -27,6 +27,11 @@ public class MainMenuPageController implements Initializable {
 
     public void setUser(User user) {
         this.user = user;
+
+        if (user.getType().equals(User.TYPE_INDIVIDUAL) || user.getType().equals(User.TYPE_COMPANY)) {
+            individualUsers.setVisible(false);
+            companyUsers.setVisible(false);
+        }
     }
 
     @Override

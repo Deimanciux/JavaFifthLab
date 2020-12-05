@@ -83,7 +83,7 @@ public class AddCategoryPageController extends AbstractController implements Ini
 
         categoryRepository.create(category);
         fms = financeManagementSystemRepository.getFmsById(fms.getId());
-        Category category1 = fms.getCategories().get(fms.getCategories().size() - 1);
+        Category category1 = categoryRepository.getCategoryLastInsertedRecord();
 
         user.addCategory(category1);
         userRepository.edit(user);

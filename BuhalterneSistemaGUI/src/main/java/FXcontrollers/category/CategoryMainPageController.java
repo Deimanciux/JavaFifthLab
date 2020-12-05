@@ -55,21 +55,33 @@ public class CategoryMainPageController extends AbstractController implements In
     }
 
     public void setFms(FinanceManagementSystem fms) {
-        this.fms = fms;
         this.fms = financeManagementSystemRepository.getFmsById(fms.getId());
-
-//        if(user.equals(User.TYPE_COMPANY) || user.equals(User.TYPE_INDIVIDUAL)) {
-//
-//        } else {
-            fillCategoryTreeView();
-//        }
-
-        getSystemBalance();
     }
 
     public void setUser(User user) {
         this.user = user;
+
+        if(user.getType().equals(User.TYPE_COMPANY) || user.getType().equals(User.TYPE_INDIVIDUAL)) {
+            fillTreeViewWithUserCategories(user.getCategories());
+        } else {
+            fillCategoryTreeView();
+        }
+
+        getSystemBalance();
     }
+
+    private void fillTreeViewWithUserCategories(List<Category> categories) {
+        treeView.setRoot(new TreeItem<>());
+        treeView.getRoot().setExpanded(true);
+
+        for (Category category : categories) {
+            TreeItem<Category> categoryTreeItem = new TreeItem<>(category);
+            treeView.getRoot().getChildren().add(categoryTreeItem);
+        }
+
+        treeView.setShowRoot(false);
+    }
+
 
     private void getSystemBalance() {
         systemIncome = 0;
@@ -93,7 +105,9 @@ public class CategoryMainPageController extends AbstractController implements In
     private void fillCategoryTreeView() {
         treeView.setRoot(new TreeItem<>());
         treeView.getRoot().setExpanded(true);
-        for (Category category : fms.getCategories()) {
+
+        for (Category category : /*fms.getCategories()*/ categoryRepository.getCategories()) {
+
             if (category.getParentCategory() == null) {
                 addTreeItems(category, treeView.getRoot());
             }
