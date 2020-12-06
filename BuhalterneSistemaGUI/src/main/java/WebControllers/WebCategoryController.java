@@ -21,8 +21,7 @@ import java.util.List;
 import java.util.Properties;
 
 @Controller
-public class
-WebCategoryController extends AbstractController {
+public class WebCategoryController extends AbstractController {
     private final CategoryRepository categoryRepository = new CategoryRepository(entityManagerFactory);
     private final UserRepository userRepository = new UserRepository(entityManagerFactory);
     private final FinanceManagementSystemRepository financeManagementSystemRepository = new FinanceManagementSystemRepository(entityManagerFactory);

@@ -18,6 +18,7 @@
                 <prop key="/category">category</prop>
                 <prop key="/income">income</prop>
                 <prop key="/expense">expense</prop>
+                <prop key="/balance">balance</prop>
             </props>
         </property>
     </bean>
@@ -40,5 +41,8 @@
     />
     <bean name="expense"
           class="WebControllers.WebExpenseController"
+    />
+    <bean name="balance"
+          class="WebControllers.WebBalanceController"
     />
 </beans>

@@ -3,8 +3,10 @@ package FXcontrollers.category;
 import FXcontrollers.AbstractController;
 import HibernateRepository.CategoryRepository;
 import HibernateRepository.FinanceManagementSystemRepository;
+import Utils.BalanceCounter;
 import Utils.ErrorPrinter;
 import Utils.LinksToPages;
+import dataModels.Balance;
 import dataStructures.*;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -33,25 +35,21 @@ public class CategoryMainPageController extends AbstractController implements In
     public MenuItem manageExpensesBtn;
     public Button viewDetailsSystem;
     public Button viewDetailsCategory;
-    public Label systemBalance;
-    public Label categoryBalance;
+    public Label systemBalanceLabel;
+    public Label categoryBalanceLabel;
 
     private FinanceManagementSystem fms;
     private User user;
     private CategoryRepository categoryRepository;
     private FinanceManagementSystemRepository financeManagementSystemRepository;
-    private double systemIncome;
-    private double systemExpense;
-    private double systemBalanceAmount;
-    private double categoryIncome;
-    private double categoryExpense;
-    private double categoryBalanceAmount;
+    private Balance systemBalance;
+    private Balance categoryBalance;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         categoryRepository = new CategoryRepository(entityManagerFactory);
         financeManagementSystemRepository = new FinanceManagementSystemRepository(entityManagerFactory);
-        categoryBalance.setText("0.00");
+        categoryBalanceLabel.setText("0.00");
     }
 
     public void setFms(FinanceManagementSystem fms) {
@@ -61,13 +59,19 @@ public class CategoryMainPageController extends AbstractController implements In
     public void setUser(User user) {
         this.user = user;
 
-        if(user.getType().equals(User.TYPE_COMPANY) || user.getType().equals(User.TYPE_INDIVIDUAL)) {
+        if (user.getType().equals(User.TYPE_COMPANY) || user.getType().equals(User.TYPE_INDIVIDUAL)) {
             fillTreeViewWithUserCategories(user.getCategories());
         } else {
             fillCategoryTreeView();
         }
 
         getSystemBalance();
+
+    }
+
+    private void getSystemBalance() {
+        systemBalance = BalanceCounter.countSystemBalance(fms);
+        systemBalanceLabel.setText(String.valueOf(String.format("%.2f", systemBalance.getBalance())));
     }
 
     private void fillTreeViewWithUserCategories(List<Category> categories) {
@@ -80,26 +84,6 @@ public class CategoryMainPageController extends AbstractController implements In
         }
 
         treeView.setShowRoot(false);
-    }
-
-
-    private void getSystemBalance() {
-        systemIncome = 0;
-        systemExpense = 0;
-        systemBalanceAmount = 0;
-
-        for (Category category : fms.getCategories()) {
-            for (Income categoryIncome : category.getIncomes()) {
-                systemIncome += categoryIncome.getAmount();
-            }
-
-            for (Expense categoryExpense : category.getExpenses()) {
-                systemExpense += categoryExpense.getAmount();
-            }
-        }
-
-        systemBalanceAmount = systemIncome - systemExpense;
-        systemBalance.setText(String.valueOf(String.format("%.2f", systemBalanceAmount)));
     }
 
     private void fillCategoryTreeView() {
@@ -313,38 +297,15 @@ public class CategoryMainPageController extends AbstractController implements In
     }
 
     public void showSystemBalanceDetails() {
-        showBalanceDialog(systemBalanceAmount, systemIncome, systemExpense);
+        showBalanceDialog(systemBalance.getBalance(), systemBalance.getIncome(), systemBalance.getExpense());
     }
 
     public void showCategoryBalanceDetails() {
-        showBalanceDialog(categoryBalanceAmount, categoryIncome, categoryExpense);
+        showBalanceDialog(categoryBalance.getBalance(), categoryBalance.getIncome(), categoryBalance.getExpense());
     }
 
     private boolean isNotItemSelectedOnTreeView() {
         return treeView.getSelectionModel().getSelectedItem() == null;
-    }
-
-    private void countCategoryBalance(List<Category> categories) {
-        for(Category category : categories) {
-            countIncomeBalanceOfCategory(category);
-            countExpenseBalanceOfCategory(category);
-
-            if(category.getSubCategories().size() > 0) {
-                countCategoryBalance(category.getSubCategories());
-            }
-        }
-    }
-
-    private void countIncomeBalanceOfCategory(Category category) {
-        for(Income income : category.getIncomes()) {
-            categoryIncome += income.getAmount();
-        }
-    }
-
-    private void countExpenseBalanceOfCategory(Category category) {
-        for(Expense expense : category.getExpenses()) {
-            categoryExpense += expense.getAmount();
-        }
     }
 
     public void showSelected() {
@@ -355,15 +316,9 @@ public class CategoryMainPageController extends AbstractController implements In
             return;
         }
 
-        categoryIncome = 0;
-        categoryExpense = 0;
-        categoryBalanceAmount = 0;
-
         category = getLeadSelect();
         categories.add(category);
-        countCategoryBalance(categories);
-
-        categoryBalanceAmount = categoryIncome - categoryExpense;
-        categoryBalance.setText(String.valueOf(String.format("%.2f", categoryBalanceAmount)));
+        categoryBalance = BalanceCounter.countCategoryBalance(categories);
+        categoryBalanceLabel.setText(String.valueOf(String.format("%.2f", categoryBalance.getBalance())));
     }
 }

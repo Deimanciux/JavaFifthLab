@@ -53,8 +53,8 @@
               <Button fx:id="delete" layoutX="200.0" layoutY="98.0" mnemonicParsing="false" onAction="#deleteCategory" prefHeight="25.0" prefWidth="153.0" text="Delete" />
             <Label layoutX="22.0" layoutY="14.0" text="System balance: " />
             <Label layoutX="21.0" layoutY="60.0" text="Category balance:" />
-            <Label fx:id="systemBalance" layoutX="127.0" layoutY="14.0" text="Label" />
-            <Label fx:id="categoryBalance" layoutX="139.0" layoutY="60.0" text="Label" />
+            <Label fx:id="systemBalanceLabel" layoutX="127.0" layoutY="14.0" text="Label" />
+            <Label fx:id="categoryBalanceLabel" layoutX="139.0" layoutY="60.0" text="Label" />
             <Label layoutX="173.0" layoutY="14.0" />
             <Button fx:id="viewDetailsSystem" layoutX="268.0" layoutY="10.0" mnemonicParsing="false" onAction="#showSystemBalanceDetails" text="View details" />
             <Button fx:id="viewDetailsCategory" layoutX="267.0" layoutY="48.0" mnemonicParsing="false" onAction="#showCategoryBalanceDetails" text="View details" />
