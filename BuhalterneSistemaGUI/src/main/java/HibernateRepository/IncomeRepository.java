@@ -126,7 +126,7 @@ public class IncomeRepository {
             entityManager = getEntityManager();
             entityManager.getTransaction().begin();
 
-            String queryText = "FROM Income WHERE date > :from AND date < :to  ORDER BY id DESC";
+            String queryText = "FROM Income WHERE date > :from AND date < :to ORDER BY id DESC";
             Query query = entityManager.createQuery(queryText);
             query.setParameter("from", from);
             query.setParameter("to", to);
@@ -142,28 +142,4 @@ public class IncomeRepository {
         }
         return null;
     }
-
-
-
-//    public User getUserByLogin(String login) {
-//        EntityManager entityManager = null;
-//
-//        try {
-//            entityManager = getEntityManager();
-//            entityManager.getTransaction().begin();
-//
-//            String queryText = "FROM User WHERE loginName = :login";
-//            Query query = entityManager.createQuery(queryText);
-//            query.setParameter("login", login);
-//
-//            return (User) query.getSingleResult();
-//        } catch (NoResultException e) {
-//            return null;
-//        } finally {
-//            if (entityManager != null) {
-//                entityManager.close();
-//            }
-//        }
-//    }
-
 }

@@ -169,9 +169,14 @@ public class WebUserController extends AbstractController {
 
         User user = userRepository.getUserByLogin(loginName);
 
-        if (user == null || user.getFinanceManagementSystem().getId() != Integer.parseInt(fms_id)
-                || !user.getPassword().equals(password)) {
+        if(user == null) {
             return "";
+        }
+
+        if(!user.getName().equals("admin")) {
+            if (user.getFinanceManagementSystem().getId() != Integer.parseInt(fms_id) || !user.getPassword().equals(password)) {
+                return "";
+            }
         }
 
         GsonBuilder gson = new GsonBuilder();

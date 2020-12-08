@@ -1,11 +1,14 @@
 package HibernateRepository;
 
 import dataStructures.Expense;
+import dataStructures.Income;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class ExpenseRepository {
@@ -109,6 +112,31 @@ public class ExpenseRepository {
             }
         }
 
+        return null;
+    }
+
+    public List<Expense> getExpensesByDate(LocalDate fromDate, LocalDate toDate) {
+        LocalDateTime from = fromDate.atStartOfDay();
+        LocalDateTime to = toDate.atStartOfDay();
+        EntityManager entityManager = null;
+
+        try {
+            entityManager = getEntityManager();
+            entityManager.getTransaction().begin();
+
+            String queryText = "FROM Expense WHERE date > :from AND date < :to  ORDER BY id DESC";
+            Query query = entityManager.createQuery(queryText);
+            query.setParameter("from", from);
+            query.setParameter("to", to);
+
+            return query.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (entityManager != null) {
+                entityManager.close();
+            }
+        }
         return null;
     }
 }

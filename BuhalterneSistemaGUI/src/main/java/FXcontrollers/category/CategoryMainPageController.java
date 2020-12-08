@@ -2,6 +2,7 @@ package FXcontrollers.category;
 
 import FXcontrollers.AbstractController;
 import HibernateRepository.CategoryRepository;
+import HibernateRepository.ExpenseRepository;
 import HibernateRepository.FinanceManagementSystemRepository;
 import HibernateRepository.IncomeRepository;
 import Utils.BalanceCounter;
@@ -9,7 +10,6 @@ import Utils.ErrorPrinter;
 import Utils.LinksToPages;
 import dataModels.Balance;
 import dataStructures.*;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -49,6 +49,7 @@ public class CategoryMainPageController extends AbstractController implements In
     private CategoryRepository categoryRepository;
     private FinanceManagementSystemRepository financeManagementSystemRepository;
     private IncomeRepository incomeRepository;
+    private ExpenseRepository expenseRepository;
     private Balance systemBalance;
     private Balance categoryBalance;
 
@@ -57,8 +58,9 @@ public class CategoryMainPageController extends AbstractController implements In
         categoryRepository = new CategoryRepository(entityManagerFactory);
         financeManagementSystemRepository = new FinanceManagementSystemRepository(entityManagerFactory);
         incomeRepository = new IncomeRepository(entityManagerFactory);
+        expenseRepository = new ExpenseRepository(entityManagerFactory);
         categoryBalanceLabel.setText("0.00");
-
+        balanceByDate.setText("No Date Chosen");
     }
 
     public void setFms(FinanceManagementSystem fms) {
@@ -331,8 +333,14 @@ public class CategoryMainPageController extends AbstractController implements In
     }
 
     public void generateBalanceByDate() {
+        Balance balance;
         List<Income> incomes;
+        List<Expense> expenses;
+
         incomes = incomeRepository.getIncomesByDate(fromDate.getValue(), toDate.getValue());
-        System.out.println(incomes);
+        expenses = expenseRepository.getExpensesByDate(fromDate.getValue(), toDate.getValue());
+        balance = BalanceCounter.countBalanceByDate(incomes, expenses, user);
+
+        balanceByDate.setText(String.valueOf(balance.getBalance()));
     }
 }
