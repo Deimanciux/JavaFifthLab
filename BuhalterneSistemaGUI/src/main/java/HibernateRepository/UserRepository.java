@@ -5,6 +5,7 @@ import dataStructures.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
@@ -49,7 +50,6 @@ public class UserRepository {
             entityManager.getTransaction().begin();
             entityManager.merge(user);
             entityManager.getTransaction().commit();
-            // entityManager.clear();
         } catch (Exception e) {
             e.printStackTrace();
 
@@ -138,14 +138,12 @@ public class UserRepository {
             query.setParameter("login", login);
 
             return (User) query.getSingleResult();
-        } catch (Exception e) {
-            System.out.println("No such user");
+        } catch (NoResultException e) {
+            return null;
         } finally {
             if (entityManager != null) {
                 entityManager.close();
             }
         }
-
-        return null;
     }
 }

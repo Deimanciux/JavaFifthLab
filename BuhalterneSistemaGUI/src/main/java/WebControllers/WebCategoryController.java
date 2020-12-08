@@ -63,25 +63,32 @@ public class WebCategoryController extends AbstractController {
     @RequestMapping(value = "category", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
-    public void addCategory(@RequestBody String request) {
+    public String addCategory(@RequestBody String request) {
         Gson parser = new Gson();
         Properties data = parser.fromJson(request, Properties.class);
         String name = data.getProperty("name");
         String description = data.getProperty("description");
-        String fmsId = data.getProperty("financeManagementSystem");
-        String parentCategoryId = data.getProperty("parentCategory");
+        String fmsId = data.getProperty("fmsId");
+        String userId = data.getProperty("userId");
+//        String parentCategoryId = data.getProperty("parentCategory");
 
         FinanceManagementSystem fms = financeManagementSystemRepository.getFmsById(Integer.parseInt(fmsId));
-        Category parentCategory = null;
-        if (parentCategoryId != null) {
-            parentCategory = categoryRepository.getCategoryById(Integer.parseInt(parentCategoryId));
-        }
+//        Category parentCategory = null;
+//        if (parentCategoryId != null) {
+//            parentCategory = categoryRepository.getCategoryById(Integer.parseInt(parentCategoryId));
+//        }
 
         try {
-            Category category = new Category(name, description, parentCategory, fms);
+            Category category = new Category(name, description, fms);
             categoryRepository.create(category);
+
+            Category category1 = categoryRepository.getCategoryLastInsertedRecord();
+            User user = userRepository.getUserById(Integer.parseInt(userId));
+            user.addCategory(category1);
+            userRepository.edit(user);
+            return "1";
         } catch (Exception e) {
-            System.out.println("Creation failed");
+            return "0";
         }
     }
 
@@ -144,6 +151,11 @@ public class WebCategoryController extends AbstractController {
     public String getUserCategories(@PathVariable Integer id) {
         User user = userRepository.getUserById(id);
         List<Category> categories = user.getCategories();
+
+        if(categories.size() == 0) {
+            return "";
+        }
+
         GsonBuilder gsonBuilder = new GsonBuilder();
 
         gsonBuilder.registerTypeAdapter(Category.class, new CategoryGsonSerializer());

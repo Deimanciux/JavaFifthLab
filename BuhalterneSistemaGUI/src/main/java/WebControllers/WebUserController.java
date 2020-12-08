@@ -3,19 +3,19 @@ package WebControllers;
 import FXcontrollers.AbstractController;
 import GSONSerializable.AllUsersGsonSerializer;
 import GSONSerializable.UserGsonSerializer;
+import HibernateRepository.CategoryRepository;
 import HibernateRepository.FinanceManagementSystemRepository;
 import HibernateRepository.UserRepository;
-import Utils.ErrorPrinter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import dataStructures.Category;
 import dataStructures.FinanceManagementSystem;
 import dataStructures.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Properties;
@@ -24,6 +24,7 @@ import java.util.Properties;
 public class WebUserController extends AbstractController {
     private final UserRepository userRepository = new UserRepository(entityManagerFactory);
     private final FinanceManagementSystemRepository financeManagementSystemRepository = new FinanceManagementSystemRepository(entityManagerFactory);
+    private final CategoryRepository categoryRepository = new CategoryRepository(entityManagerFactory);
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
@@ -116,28 +117,32 @@ public class WebUserController extends AbstractController {
     @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
-    public void updateUser(@PathVariable Integer id, @RequestBody String request) {
-        if (id == null) {
-            System.out.println("No system chosen for update");
-            return;
+    public String updateUser(@PathVariable Integer id, @RequestBody String request) {
+        User user = userRepository.getUserById(id);
+
+        if (user == null) {
+            System.out.println("No user chosen for update");
+            return "0";
         }
 
-        User user = userRepository.getUserById(id);
-        Gson parser = new Gson();
-        Properties data = parser.fromJson(request, Properties.class);
-        String name = data.getProperty("name");
-        String loginName = data.getProperty("loginName");
-        String password = data.getProperty("password");
-        String email = data.getProperty("email");
-        String phoneNumber = data.getProperty("phoneNumber");
+        try {
+            Gson parser = new Gson();
+            Properties data = parser.fromJson(request, Properties.class);
+            String name = data.getProperty("name");
+            String loginName = data.getProperty("loginName");
+            String email = data.getProperty("email");
+            String surname = data.getProperty("surname");
 
-
-        user.setName(name);
-        user.setLoginName(loginName);
-        user.setPassword(password);
-        user.setEmail(email);
-        user.setPhoneNumber(phoneNumber);
-        userRepository.edit(user);
+            user.setName(name);
+            user.setLoginName(loginName);
+            user.setEmail(email);
+            user.setSurname(surname);
+            userRepository.edit(user);
+            return "1";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "0";
+        }
     }
 
     @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
@@ -166,12 +171,33 @@ public class WebUserController extends AbstractController {
 
         if (user == null || user.getFinanceManagementSystem().getId() != Integer.parseInt(fms_id)
                 || !user.getPassword().equals(password)) {
-            return null;
+            return "";
         }
 
         GsonBuilder gson = new GsonBuilder();
         gson.registerTypeAdapter(User.class, new UserGsonSerializer());
         Gson parser1 = gson.create();
         return parser1.toJson(user);
+    }
+
+    @RequestMapping(value = "/category/{id}/users", method = RequestMethod.GET)
+    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseBody
+    public String getCategoryUsers(@PathVariable Integer id) {
+        Category category = categoryRepository.getCategoryById(id);
+        System.out.println("users list " + category.getResponsiblePerson());
+        List<User> users = category.getResponsiblePerson();
+        GsonBuilder gsonBuilder = new GsonBuilder();
+
+        gsonBuilder.registerTypeAdapter(User.class, new UserGsonSerializer());
+        Gson parser = gsonBuilder.create();
+        parser.toJson(users.get(0));
+
+        Type usersList = new TypeToken<List<User>>() {
+        }.getType();
+        gsonBuilder.registerTypeAdapter(usersList, new AllUsersGsonSerializer());
+        parser = gsonBuilder.create();
+
+        return parser.toJson(users);
     }
 }

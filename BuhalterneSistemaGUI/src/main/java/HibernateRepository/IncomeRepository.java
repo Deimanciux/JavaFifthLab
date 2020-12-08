@@ -2,11 +2,10 @@ package HibernateRepository;
 
 import dataStructures.Income;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaQuery;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class IncomeRepository {
@@ -117,4 +116,54 @@ public class IncomeRepository {
 
         return null;
     }
+
+    public List<Income> getIncomesByDate(LocalDate fromDate, LocalDate toDate) {
+        LocalDateTime from = fromDate.atStartOfDay();
+        LocalDateTime to = toDate.atStartOfDay();
+        EntityManager entityManager = null;
+
+        try {
+            entityManager = getEntityManager();
+            entityManager.getTransaction().begin();
+
+            String queryText = "FROM Income WHERE date > :from AND date < :to  ORDER BY id DESC";
+            Query query = entityManager.createQuery(queryText);
+            query.setParameter("from", from);
+            query.setParameter("to", to);
+
+            return query.getResultList();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (entityManager != null) {
+                entityManager.close();
+            }
+        }
+        return null;
+    }
+
+
+
+//    public User getUserByLogin(String login) {
+//        EntityManager entityManager = null;
+//
+//        try {
+//            entityManager = getEntityManager();
+//            entityManager.getTransaction().begin();
+//
+//            String queryText = "FROM User WHERE loginName = :login";
+//            Query query = entityManager.createQuery(queryText);
+//            query.setParameter("login", login);
+//
+//            return (User) query.getSingleResult();
+//        } catch (NoResultException e) {
+//            return null;
+//        } finally {
+//            if (entityManager != null) {
+//                entityManager.close();
+//            }
+//        }
+//    }
+
 }

@@ -3,11 +3,13 @@ package FXcontrollers.category;
 import FXcontrollers.AbstractController;
 import HibernateRepository.CategoryRepository;
 import HibernateRepository.FinanceManagementSystemRepository;
+import HibernateRepository.IncomeRepository;
 import Utils.BalanceCounter;
 import Utils.ErrorPrinter;
 import Utils.LinksToPages;
 import dataModels.Balance;
 import dataStructures.*;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -37,11 +39,16 @@ public class CategoryMainPageController extends AbstractController implements In
     public Button viewDetailsCategory;
     public Label systemBalanceLabel;
     public Label categoryBalanceLabel;
+    public Label balanceByDate;
+    public DatePicker fromDate;
+    public DatePicker toDate;
+    public Button generate;
 
     private FinanceManagementSystem fms;
     private User user;
     private CategoryRepository categoryRepository;
     private FinanceManagementSystemRepository financeManagementSystemRepository;
+    private IncomeRepository incomeRepository;
     private Balance systemBalance;
     private Balance categoryBalance;
 
@@ -49,7 +56,9 @@ public class CategoryMainPageController extends AbstractController implements In
     public void initialize(URL url, ResourceBundle resourceBundle) {
         categoryRepository = new CategoryRepository(entityManagerFactory);
         financeManagementSystemRepository = new FinanceManagementSystemRepository(entityManagerFactory);
+        incomeRepository = new IncomeRepository(entityManagerFactory);
         categoryBalanceLabel.setText("0.00");
+
     }
 
     public void setFms(FinanceManagementSystem fms) {
@@ -66,7 +75,6 @@ public class CategoryMainPageController extends AbstractController implements In
         }
 
         getSystemBalance();
-
     }
 
     private void getSystemBalance() {
@@ -90,7 +98,7 @@ public class CategoryMainPageController extends AbstractController implements In
         treeView.setRoot(new TreeItem<>());
         treeView.getRoot().setExpanded(true);
 
-        for (Category category : /*fms.getCategories()*/ categoryRepository.getCategories()) {
+        for (Category category : fms.getCategories()) {
 
             if (category.getParentCategory() == null) {
                 addTreeItems(category, treeView.getRoot());
@@ -320,5 +328,11 @@ public class CategoryMainPageController extends AbstractController implements In
         categories.add(category);
         categoryBalance = BalanceCounter.countCategoryBalance(categories);
         categoryBalanceLabel.setText(String.valueOf(String.format("%.2f", categoryBalance.getBalance())));
+    }
+
+    public void generateBalanceByDate() {
+        List<Income> incomes;
+        incomes = incomeRepository.getIncomesByDate(fromDate.getValue(), toDate.getValue());
+        System.out.println(incomes);
     }
 }

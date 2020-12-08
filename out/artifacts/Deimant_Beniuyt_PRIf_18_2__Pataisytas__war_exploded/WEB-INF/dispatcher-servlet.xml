@@ -19,6 +19,7 @@
                 <prop key="/income">income</prop>
                 <prop key="/expense">expense</prop>
                 <prop key="/balance">balance</prop>
+                <prop key="/overview">overview</prop>
             </props>
         </property>
     </bean>
@@ -44,5 +45,8 @@
     />
     <bean name="balance"
           class="WebControllers.WebBalanceController"
+    />
+    <bean name="overview"
+          class="WebControllers.WebOverviewController"
     />
 </beans>

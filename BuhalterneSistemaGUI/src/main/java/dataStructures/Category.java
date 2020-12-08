@@ -49,10 +49,12 @@ public class Category implements Serializable {
     //naudojamas testuoi api
     public Category(
             String name,
-            String description
+            String description,
+            FinanceManagementSystem fms
     ) {
         this.name = name;
         this.description = description;
+        this.financeManagementSystem = fms;
     }
 
     public Category(

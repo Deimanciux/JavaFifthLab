@@ -56,7 +56,7 @@ public class MainMenuPageController implements Initializable {
     }
 
     public void returnToLoginPage() {
-        new LinksToPages().goToLoginPage(logOut);
+        new LinksToPages().goToLoginPage(logOut, fms );
     }
 
     public void editProfile() {
