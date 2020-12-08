@@ -66,6 +66,7 @@ public class RegistrationPageController extends AbstractController implements In
             userRepository.create(user);
             fms = financeManagementSystemRepository.getFmsById(fms.getId());
         } catch (Exception e) {
+
             ErrorPrinter.printError("This login name is taken. Choose another one.");
             return;
         }
@@ -86,7 +87,7 @@ public class RegistrationPageController extends AbstractController implements In
     }
 
     public void goToLoginPage() {
-        new LinksToPages().goToLoginPage(add);
+        new LinksToPages().goToLoginPage(add, fms);
     }
 
     private void loadMainMenuPage() throws IOException {

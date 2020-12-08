@@ -16,6 +16,7 @@
                 <Button fx:id="signIn" layoutX="27.0" layoutY="170.0" mnemonicParsing="false" onAction="#validateUser" prefHeight="25.0" prefWidth="149.0" text="Sign In" />
                 <Button fx:id="register" layoutX="27.0" layoutY="325.0" mnemonicParsing="false" onAction="#sendToRegistration" prefHeight="25.0" prefWidth="149.0" text="Don't have account? " />
             <PasswordField fx:id="signInPassword" layoutX="26.0" layoutY="121.0" />
+            <Button fx:id="goToFmsBtn" layoutX="26.0" layoutY="286.0" mnemonicParsing="false" onAction="#goToFmsPage" prefHeight="25.0" prefWidth="149.0" text="Choose Another System" />
             </children>
         </AnchorPane>
     </children>

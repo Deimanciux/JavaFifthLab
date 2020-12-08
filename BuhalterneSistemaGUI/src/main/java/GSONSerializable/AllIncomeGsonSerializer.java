@@ -13,7 +13,7 @@ public class AllIncomeGsonSerializer implements JsonSerializer<List<Income>> {
         JsonArray jsonArray = new JsonArray();
 
         GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(Income.class, new FmsGsonSerializer());
+        gsonBuilder.registerTypeAdapter(Income.class, new IncomeGsonSerializer());
         Gson parser = gsonBuilder.create();
 
         for (Income income : incomes) {

@@ -1,7 +1,6 @@
 package FXcontrollers;
 
 import FXcontrollers.registration.RegistrationPageController;
-import HibernateRepository.CategoryRepository;
 import HibernateRepository.FinanceManagementSystemRepository;
 import HibernateRepository.UserRepository;
 import Utils.ErrorPrinter;
@@ -25,21 +24,22 @@ public class LoginPageController extends AbstractController implements Initializ
     public TextField signInPassword;
     public Button signIn = new Button();
     public Button register;
+    public Button goToFmsBtn;
 
     private FinanceManagementSystem fms;
     private User user;
-    private final UserRepository userRepository;
-    private final FinanceManagementSystemRepository financeManagementSystemRepository;
-
-    public LoginPageController() {
-        this.userRepository = new UserRepository(entityManagerFactory);
-        this.financeManagementSystemRepository = new FinanceManagementSystemRepository(entityManagerFactory);
-    }
+    private UserRepository userRepository;
+    private FinanceManagementSystemRepository financeManagementSystemRepository;
 
     @SneakyThrows
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        fms = financeManagementSystemRepository.getFmsById(1);
+        this.userRepository = new UserRepository(entityManagerFactory);
+        this.financeManagementSystemRepository = new FinanceManagementSystemRepository(entityManagerFactory);
+    }
+
+    public void setFms (FinanceManagementSystem fms) {
+        this.fms = fms;
     }
 
     public void validateUser() throws IOException {
@@ -53,6 +53,13 @@ public class LoginPageController extends AbstractController implements Initializ
         if (!user.getPassword().equals(signInPassword.getText())) {
             ErrorPrinter.printError("User with given credentials was not found");
             return;
+        }
+
+        if (!user.getLoginName().equals("admin")) {
+            if (user.getFinanceManagementSystem().getId() != fms.getId()) {
+                ErrorPrinter.printError("User with given credentials was not found in system");
+                return;
+            }
         }
 
         loadMainMenuPage();
@@ -78,5 +85,9 @@ public class LoginPageController extends AbstractController implements Initializ
         assert root != null;
         stage.setScene(new Scene(root));
         stage.show();
+    }
+
+    public void goToFmsPage() {
+        new LinksToPages().goToFmsPage(signIn);
     }
 }

@@ -43,16 +43,6 @@ public class FinanceManagementSystem implements Serializable {
         this.systemVersion = systemVersion;
     }
 
-    @Override
-    public String toString() {
-        return "FinanceManagementSystem{" +
-                "company='" + company + '\'' + "\n" +
-                "systemCreated=" + systemCreated + "\n" +
-                "systemVersion='" + systemVersion + '\'' + "\n" +
-                "categories=" + categories + "\n" +
-                "} \n";
-    }
-
     public List<User> getIndividualPersons() {
         return users.stream().filter(user -> user.getType().equals(User.TYPE_INDIVIDUAL)).collect(Collectors.toList());
     }
@@ -168,5 +158,10 @@ public class FinanceManagementSystem implements Serializable {
 
     public void setUsers(List<User> users) {
         this.users = users;
+    }
+
+    @Override
+    public String toString() {
+        return company + " " + systemVersion;
     }
 }

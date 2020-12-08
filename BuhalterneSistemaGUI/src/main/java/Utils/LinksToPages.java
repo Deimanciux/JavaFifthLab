@@ -1,5 +1,6 @@
 package Utils;
 
+import FXcontrollers.LoginPageController;
 import FXcontrollers.category.CategoryMainPageController;
 import FXcontrollers.MainMenuPageController;
 import FXcontrollers.company.CompanyMainPageController;
@@ -15,6 +16,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -131,8 +133,27 @@ public class LinksToPages {
         stage.show();
     }
 
-    public void goToLoginPage(Button pageStageIdentifier) {
+    public void goToLoginPage(Button pageStageIdentifier, FinanceManagementSystem fms) {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/LoginPage.fxml"));
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        LoginPageController loginPageController = loader.getController();
+        loginPageController.setFms(fms);
+
+        Stage stage = (Stage) pageStageIdentifier.getScene().getWindow();
+        assert root != null;
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
+
+    public void goToFmsPage(Button pageStageIdentifier) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../FXML/FmsPage.fxml"));
         Parent root = null;
         try {
             root = loader.load();

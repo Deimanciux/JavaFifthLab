@@ -27,6 +27,11 @@ public class WebFinanceManagementSystemController extends AbstractController {
     @ResponseBody
     public String getFinanceManagementSystems() {
         List<FinanceManagementSystem> allFms = financeManagementSystemRepository.getAllFms();
+
+        if (allFms.size() == 0) {
+            return "";
+        }
+
         GsonBuilder gsonBuilder = new GsonBuilder();
 
         gsonBuilder.registerTypeAdapter(FinanceManagementSystem.class, new FmsGsonSerializer());
