@@ -122,14 +122,6 @@ public class Category implements Serializable {
         return description;
     }
 
-    public void setResponsiblePerson(List<User> responsiblePerson) {
-        this.responsiblePerson = responsiblePerson;
-    }
-
-    public void setSubCategories(List<Category> subCategories) {
-        this.subCategories = subCategories;
-    }
-
     public FinanceManagementSystem getFinanceManagementSystem() {
         return financeManagementSystem;
     }
@@ -158,29 +150,6 @@ public class Category implements Serializable {
         return incomes;
     }
 
-    public Category removeIncome(Income income) {
-        incomes.remove(income);
-        income.setCategory(null);
-
-        return this;
-    }
-
-    public Category addIncome(Income income) {
-        if (!incomes.contains(income)) {
-            incomes.add(income);
-            income.setCategory(this);
-        }
-
-        return this;
-    }
-
-    public Category removeExpense(Expense expense) {
-        expenses.remove(expense);
-        expense.setCategory(null);
-
-        return this;
-    }
-
     public Category addExpense(Expense expense) {
         if (!expenses.contains(expense)) {
             expenses.add(expense);
@@ -203,15 +172,5 @@ public class Category implements Serializable {
             responsiblePerson.add(user);
             user.getCategories().add(this);
         }
-    }
-
-    public void removeResponsiblePerson(User user) {
-        responsiblePerson.remove(user);
-        user.getCategories().remove(this);
-    }
-
-    public void removeSubCategory(Category category) {
-        subCategories.remove(category);
-        category.setParentCategory(null);
     }
 }

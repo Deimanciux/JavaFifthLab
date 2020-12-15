@@ -57,12 +57,6 @@ public class FinanceManagementSystem implements Serializable {
         ).findFirst().orElse(null);
     }
 
-    public User getUserDataByLogin(String login) {
-        return users.stream().filter(
-                user -> user.getLoginName().equals(login)
-        ).findFirst().orElse(null);
-    }
-
     public Category getCategoryData(String name) {
         return categories.stream().filter(category -> category.getName().equals(name)).findFirst().orElse(null);
     }
@@ -94,26 +88,6 @@ public class FinanceManagementSystem implements Serializable {
         }
 
         return this;
-    }
-
-    public FinanceManagementSystem removeUser(User user) {
-        users.remove(user);
-        user.setFinanceManagementSystem(null);
-
-        return this;
-    }
-
-    public ArrayList<Category> getAllCategoriesThatNeedsToBeDeleted(ArrayList<Category> categoriesForDeletion) {
-        ArrayList<Category> result = new ArrayList<>();
-
-        for (Category deleteCat : categoriesForDeletion) {
-            for (Category category : categories) {
-                if (category.getParentName().equals(deleteCat.getName())) {
-                    result.add(category);
-                }
-            }
-        }
-        return result;
     }
 
     public int getId() {
